@@ -1,0 +1,24 @@
+To reach a final deliverable, perform the following steps.
+They assume you begin with a corpus containing full text called jason.gz.jsonl
+
+1. tokenize_corpus.py
+   - Input: jason.gz.jsonl
+   - Output: tokenized.gz.jsonl
+2. load_model.py
+   - Input: tokenized.gz.jsonl; use default arguments in file
+   - Output: subdocs; dictionary
+3. train_topic_model.py (run 5 times)
+   - Input: sudocs; dictionary; args.num_topics [10, 20, 30, 40, 50]
+   - Output: model_[10, 20, 30, 40, 50]; topics_[10, 20, 30, 40, 50].json
+4. apply_topic_model.py (run 5 times)
+   - Input: model_[10, 20, 30, 40, 50]; subdocs; dictionary
+   - Output: counts_[10, 20, 30, 40, 50].json
+5. inspect_topic_model.py (run 5 times)
+   - Input: counts_[10, 20, 30, 40, 50].json; model_[10, 20, 30, 40, 50]
+   - Output: counts_graph_[10, 20, 30, 40, 50].png
+6. evaluate_model.py
+   - Input: subdocs; dictionary; model_[10, 20, 30, 40, 50]
+   - Output: evaluation.json
+7. generate_chart.py
+   - Input: evaluation.json
+   - Output: eval_chart.txt
