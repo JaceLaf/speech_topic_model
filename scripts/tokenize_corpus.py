@@ -1,3 +1,4 @@
+# Imports necessary modules
 import argparse
 import sys
 import csv
@@ -11,19 +12,20 @@ nltk.download("punkt")
 csv.field_size_limit(sys.maxsize)
 
 if __name__ == "__main__":
-	#define your argument parser with 2 arguments: corpus csv in, tokenized out
+	# Defines argument parser with 2 arguments: corpus csv in, tokenized out
 	parser = argparse.ArgumentParser()
 	parser.add_argument("json_in", help="original data in json format")
 	parser.add_argument("tokenized_jsonl", help="zipped json file to write into")
 	args = parser.parse_args()
 
-	#open those 2 arguments using with, csv for reading, tokenized out for gzip writing
+	# Opens  arguments using with, csv for reading, tokenized out for gzip writing
 	with gzip.open(args.json_in, "rt") as json_in, gzip.open(args.tokenized_jsonl,"wt") as json_out:
 		count = 0
 
-		#iterate over each row of this dict reader
+		# Iterates over each row of dict reader
 		for line in json_in:
-			#define a csv DictReader with the target object being your csv file you	opened
+
+			# Defines a csv DictReader with the target object being csv file opened
 			row = json.loads(line)
 
 			print(count)
@@ -32,5 +34,5 @@ if __name__ == "__main__":
 			row["full_text"] = " ".join(row["full_text"])
 			row["full_text"] = [nltk.word_tokenize(sent) for sent in nltk.sent_tokenize(row["full_text"].lower())]
 
-			#write this new version of the dictionary to the gzip outfile using json.dumps(). Don't forget to append a newline ("\n")
+			# Writes new version of dictionary to the gzip outfile
 			json_out.write(json.dumps(row) + "\n")

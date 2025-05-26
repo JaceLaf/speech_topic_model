@@ -1,3 +1,4 @@
+# Imports necessary modules
 import argparse
 import json
 import pickle
@@ -7,7 +8,7 @@ from matplotlib.figure import Figure
 from matplotlib.table import Table, table
 import matplotlib.pyplot as plt
 
-
+# Uses argparse to take files and needed input variables
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "counts",
@@ -55,18 +56,21 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+# Loads in the models and the counts
 with open(args.model, "rb") as mod:
     model = pickle.loads(mod.read())
 
 with open(args.counts, "rt") as ifd:
     counts = json.loads(ifd.read())
 
+# Sums the counts for each topic in the data
 topic_counts = np.zeros(model.num_topics)
 for topic_id, count in counts:
     topic_counts[int(topic_id)] = count
 
 topic_proportions = topic_counts/topic_counts.sum()
 
+# Creates a bargraph containing the counts of each topic
 fig = Figure(figsize=(20,10))
 ax = fig.add_axes([0.05, 0.45, 0.9, 0.5])
 

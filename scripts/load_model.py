@@ -1,3 +1,4 @@
+# Imports necessary modules
 import argparse
 import gzip
 import json
@@ -7,6 +8,7 @@ from nltk.corpus import stopwords
 from gensim.corpora.dictionary import Dictionary
 import gensim.parsing.preprocessing as gpp
 
+# Adds each argument using argparse with defaults for each variable
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "data",
@@ -65,7 +67,10 @@ args = parser.parse_args()
 
 subdocuments = []
 
+# Opens tokenized data file
 with gzip.open(args.data, "rt") as ifd:
+
+    # Reads in and strips each row
     for row in ifd:
         jrow = json.loads(row)
         tokens = " ".join([t for s in jrow["full_text"] for t in s])
@@ -75,18 +80,22 @@ with gzip.open(args.data, "rt") as ifd:
 
         num_subdocuments = int(len(tokens) / args.subdocument_length)
 
+        # Appends each filtered word back into subdocument list
         for subnum in range(num_subdocuments):
             start_token_index = subnum * args.subdocument_length
             end_token_index = (subnum + 1) * args.subdocument_length
             subdocument_tokens = tokens[start_token_index:end_token_index]
             subdocuments.append(subdocument_tokens)
 
+# Filters subdocument list based on inputted maximum
 random.shuffle(subdocuments)
 subdocuments = subdocuments[0:args.maximum_subdocuments if args.maximum_subdocuments else len(subdocuments)]
 
+# Creates a dictionary for training based on subdocuments
 dct = Dictionary(documents=subdocuments)
 dct.filter_extremes(no_below=args.minimum_word_count, no_above=args.maximum_word_proportion)
 
+# Writes results to files
 with gzip.open(args.subdocs, "wt") as out_subdocs:
     json.dump(subdocuments, out_subdocs)
 

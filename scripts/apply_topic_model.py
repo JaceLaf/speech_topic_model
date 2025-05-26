@@ -1,3 +1,4 @@
+# Imports necessary modules
 import gzip
 import re
 import logging
@@ -14,6 +15,7 @@ import gensim.parsing.preprocessing as gpp
 
 logging.basicConfig(level=logging.INFO)
 
+# Uses argparse to load in file paths and needed info
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
@@ -51,14 +53,17 @@ args = parser.parse_args()
 
 topic_counts = {}
 
+# Opens each module and dictionary
 with open(args.model, "rb") as ifd:
     model = pickle.loads(ifd.read())
 
 dct = Dictionary.load(args.dictionary)
 
+# Opens subdocuments
 with gzip.open(args.subdoc, "rt") as sub:
     subdocuments = json.load(sub)
 
+    # Sums each topic's prevalence in the subdocuments based on the model
     for doc in subdocuments:
         bow = dct.doc2bow(doc)
         topic_dist = model.get_document_topics(bow)
@@ -67,7 +72,7 @@ with gzip.open(args.subdoc, "rt") as sub:
             topic_counts[topic_id] = topic_counts.get(topic_id, 0) + topic_prob
 
 
-
+# Writes counts to output file
 with open(args.counts, "wt") as ofd:
     ofd.write(
         json.dumps(

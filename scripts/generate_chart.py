@@ -1,6 +1,8 @@
+# Imports necessary modules
 import argparse
 import json
 
+# Loads in paths to input and output files
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "results_json",
@@ -13,9 +15,11 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+# Loads input file
 with open(args.results_json, "r") as i:
     results = json.load(i)
 
+# Writes evaluation resulsts to output in markdown format
 with open(args.chart, "w") as o:
     o.write("| Model File    | Coherence  | Perplexity |\n")
     o.write("|---------------|------------|------------|\n")

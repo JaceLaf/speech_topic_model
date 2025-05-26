@@ -1,3 +1,4 @@
+# Imports necessary modules
 import csv
 import re
 import logging
@@ -16,6 +17,7 @@ import gensim.parsing.preprocessing as gpp
 
 logging.basicConfig(level=logging.INFO)
 
+# Uses argparse to take arguments
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "dictionary",
@@ -69,10 +71,12 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+# Checks for a seed
 if args.random_seed:
     random.seed(args.random_seed)
     numpy.random.seed(args.random_seed)
 
+# Loads in subdocuments
 with gzip.open(args.subdocs, "rt") as sub:
     subdocuments = json.load(sub)
 
@@ -80,6 +84,7 @@ dct = Dictionary.load(args.dictionary)
 
 temp = dct[0]
 
+# Creates a training list and module using GenSim
 train = [dct.doc2bow(subdoc) for subdoc in subdocuments]
 
 model = LdaModel(
@@ -94,11 +99,13 @@ model = LdaModel(
     chunksize=args.chunksize
 )
 
+# Creates a deliverable dictionary of each topic
 topics = [
     {"topic_id": int(topic_id), "topic_text": topic_text}
     for topic_id, topic_text in model.print_topics()
 ]
 
+# Writes results to output files
 with open(args.results, "w") as out:
     json.dump(topics, out)
 
