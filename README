@@ -1,4 +1,5 @@
 To reach a final deliverable, perform the following steps.
+
 First, you must derive a corpus of data in .gz.jsonl format. I got this from HathiTrust. My search parameters for this project were:
 - Narrow 'Subject' field to 'speeches'
 - Filter 'Publication year' to between 1870 and 1920
@@ -33,3 +34,5 @@ First, you must derive a corpus of data in .gz.jsonl format. I got this from Hat
    - Purpose: Visualizes the evaluation in chart format
    - Input: evaluation.json
    - Output: eval_chart.txt
+
+My results and conclusions from this project are explained in the file Lafita_CI_Final.pdf, containing a short report.
